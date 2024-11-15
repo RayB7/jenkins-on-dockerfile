@@ -1,0 +1,13 @@
+FROM ubuntu
+RUN apt update -y
+RUN apt install -y wget
+RUN apt install openjdk-11-jdk -y
+ENV MAVEN_VERSION=3.9.9
+ENV MAVEN_HOME=/opt/apache-maven-$MAVEN_VERSION
+RUN wget https://dlcdn.apache.org/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz && \
+    tar xzvf apache-maven-$MAVEN_VERSION-bin.tar.gz -C /opt && \
+    rm apache-maven-$MAVEN_VERSION-bin.tar.gz
+RUN echo "export MAVEN_HOME=$MAVEN_HOME" >> /etc/profile.d/maven.sh
+RUN echo "export PATH=\$MAVEN_HOME/bin:\$PATH" >> /etc/profile.d/maven.sh
+ENV PATH=$MAVEN_HOME/bin:$PATH
+RUN mvn -version
